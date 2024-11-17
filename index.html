@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Warehouse Check-in">
+  <link rel="apple-touch-icon" href="https://i.imgur.com/V1zQRS2.png">
+  <title>Integrated Warehouse Stock Control System</title>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/V1zQRS2.png">
+  <link rel="stylesheet" href="Google Sheet.css">
+  <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://i.imgur.com/1gP2COf.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+        h1 {
+            margin: 0;
+            color: #3a3a3a;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button-container a {
+            display: block;
+            width: 200px;
+            height: 50px;
+        }
+        .button-container button {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #23408f;
+            background-color: #f0f0f0; /* Lighter background for sub buttons */
+            border: 2px solid #23408f; /* Border to distinguish */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .button-container button:hover {
+            background-color: #e7d257a8; /* Subtle hover effect */
+            color: #23408f;
+        }
+        /* Active button indicator */
+        .button-container .active {
+            background-color: #fcb620; /* Highlight color */
+            color: #000; /* Change text color to black */
+        }
+
+        /* Additional styling for "Warehouse Use" and "Monitoring Use" buttons */
+        .usage-buttons {
+            display: flex;
+            flex-wrap: wrap; /* Allows the buttons to wrap into rows */
+            gap: 10px;
+            justify-content: center;
+        }
+        .usage-buttons button {
+            width: calc(50% - 10px);
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            background-color: #23408f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .usage-buttons button:hover {
+            background-color: #fcb620;
+            color: #000;
+        }
+
+        /* Active state color for clicked buttons */
+        .usage-buttons .selected {
+            background-color: #fcb620; /* Yellow to indicate active */
+            color: #000; /* Change text color to black */
+            border: 2px solid #23408f; /* Optional border for emphasis */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.imgur.com/XZvd1fv.png" alt="Sample Image" class="logo">
+        <h1>INTEGRATED SYSTEMS</h1>
+        
+        <!-- New buttons to select between Warehouse Use and Monitoring Use -->
+        <div class="usage-buttons">
+            <button id="warehouseBtn" onclick="showWarehouse()">Warehouse</button>
+            <button id="inspectionBtn" onclick="showInspection()">Inspection</button>
+            <button id="productionBtn" onclick="showProduction()">Production</button>
+            <button id="purchasingBtn" onclick="showPurchasing()">Purchasing</button>
+            <button id="monitoringBtn" onclick="showMonitoring()">Monitoring</button>
+        </div>
+        
+        <!-- Section for Warehouse Use -->
+        <div class="button-container" id="warehouse-buttons" style="display: none;">
+            <a href="https://raw.githack.com/nurareef/my-website/main/WarehouseRefill&RestockV1.5.html">
+                <button class="button-Consumables">Consumables Stock</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/WarehouseProjectItemV3.0.html">
+                <button class="button-ProjectItem">Project Item Stock</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/WarehouseSystemScanner1.8.html">
+                <button class="button-MainSupplier">Main Supplier Stock</button>
+            </a>
+        </div>
+
+        <!-- Section for Monitoring Use -->
+        <div class="button-container" id="monitoring-buttons" style="display: none;">
+            <a href="">
+                <button class="button-Consumables">Consumables Monitoring</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/WarehouseProjectItemDashboardV2.6.html">
+                <button class="button-ProjectItem">Project Item Monitoring</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/MainSupplierDashboardV1.0.html">
+                <button class="button-MainSupplier">Main Supplier Monitoring</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/IES_StockRequestMonitoring_v1.0.html">
+                <button class="button-MainSupplier">Stock Request Monitoring</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/IES_40kVAMonitoring_v1.0.html">
+                <button class="button-MainSupplier">40kVA Inspection Status</button>
+            </a>
+        </div>
+
+        <!-- Section for Production Use -->
+        <div class="button-container" id="production-buttons" style="display: none;">
+            <a href="https://raw.githack.com/nurareef/my-website/main/IES_StockRequest_v1.0.html">
+                <button class="button-Consumables">Stock Request</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/IES_StockApproval_v1.0.html">
+                <button class="button-ProjectItem">Stock Approval</button>
+            </a>
+        </div>
+
+        <!-- Section for Purchasing Use -->
+        <div class="button-container" id="purchasing-buttons" style="display: none;">
+            <a href="https://raw.githack.com/nurareef/my-website/main/IES_StockPurchasing_v1.0.html">
+                <button class="button-MainSupplier">Stock Purchasing</button>
+            </a>
+            <a href="https://raw.githack.com/nurareef/my-website/main/IES_PO_Submission_v1.0(MOD).html">
+                <button class="button-MainSupplier">Raised Purchasing Order</button>
+            </a>
+        </div>
+
+        <!-- Section for Inspection Use -->
+        <div class="button-container" id="inspection-buttons" style="display: none;">
+            <a href="https://raw.githack.com/nurareef/my-website/main/40kVA_Checklist_form_v1.0.html">
+                <button class="button-MainSupplier">40kVA Electrical Inspection</button>
+            </a>
+        </div>
+        
+        
+        
+    </div>
+
+    <script>
+        // Show the Warehouse Use buttons and set the active button
+        function showWarehouse() {
+            document.getElementById('warehouse-buttons').style.display = 'flex';
+            document.getElementById('monitoring-buttons').style.display = 'none';
+            document.getElementById('production-buttons').style.display = 'none';
+            document.getElementById('purchasing-buttons').style.display = 'none';
+            document.getElementById('inspection-buttons').style.display = 'none';
+
+            // Set active button style
+            document.getElementById('warehouseBtn').classList.add('selected');
+            document.getElementById('monitoringBtn').classList.remove('selected');
+            document.getElementById('productionBtn').classList.remove('selected');
+            document.getElementById('purchasingBtn').classList.remove('selected');
+            document.getElementById('inspectionBtn').classList.remove('selected');
+        }
+
+        // Show the Monitoring Use buttons and set the active button
+        function showMonitoring() {
+            document.getElementById('warehouse-buttons').style.display = 'none';
+            document.getElementById('monitoring-buttons').style.display = 'flex';
+            document.getElementById('production-buttons').style.display = 'none';
+            document.getElementById('purchasing-buttons').style.display = 'none';
+            document.getElementById('inspection-buttons').style.display = 'none';
+
+            // Set active button style
+            document.getElementById('monitoringBtn').classList.add('selected');
+            document.getElementById('warehouseBtn').classList.remove('selected');
+            document.getElementById('productionBtn').classList.remove('selected');
+            document.getElementById('purchasingBtn').classList.remove('selected');
+            document.getElementById('inspectionBtn').classList.remove('selected');
+        }
+
+        // Show the Production Use buttons and set the active button
+        function showProduction() {
+            document.getElementById('warehouse-buttons').style.display = 'none';
+            document.getElementById('monitoring-buttons').style.display = 'none';
+            document.getElementById('production-buttons').style.display = 'flex';
+            document.getElementById('purchasing-buttons').style.display = 'none';
+            document.getElementById('inspection-buttons').style.display = 'none';
+
+            // Set active button style
+            document.getElementById('monitoringBtn').classList.remove('selected');
+            document.getElementById('warehouseBtn').classList.remove('selected');
+            document.getElementById('productionBtn').classList.add('selected');
+            document.getElementById('purchasingBtn').classList.remove('selected');
+            document.getElementById('inspectionBtn').classList.remove('selected');
+        }
+        
+        // Show the Purchasing Use buttons and set the active button
+        function showPurchasing() {
+            document.getElementById('warehouse-buttons').style.display = 'none';
+            document.getElementById('monitoring-buttons').style.display = 'none';
+            document.getElementById('production-buttons').style.display = 'none';
+            document.getElementById('purchasing-buttons').style.display = 'flex';
+            document.getElementById('inspection-buttons').style.display = 'none';
+
+            // Set active button style
+            document.getElementById('monitoringBtn').classList.remove('selected');
+            document.getElementById('warehouseBtn').classList.remove('selected');
+            document.getElementById('productionBtn').classList.remove('selected');
+            document.getElementById('purchasingBtn').classList.add('selected');
+            document.getElementById('inspectionBtn').classList.remove('selected');
+        }
+
+        // Show the Inspection Use buttons and set the active button
+        function showInspection() {
+            document.getElementById('warehouse-buttons').style.display = 'none';
+            document.getElementById('monitoring-buttons').style.display = 'none';
+            document.getElementById('production-buttons').style.display = 'none';
+            document.getElementById('purchasing-buttons').style.display = 'none';
+            document.getElementById('inspection-buttons').style.display = 'flex';
+
+            // Set active button style
+            document.getElementById('monitoringBtn').classList.remove('selected');
+            document.getElementById('warehouseBtn').classList.remove('selected');
+            document.getElementById('productionBtn').classList.remove('selected');
+            document.getElementById('purchasingBtn').classList.remove('selected');
+            document.getElementById('inspectionBtn').classList.add('selected');
+        }
+
+    </script>
+</body>
+</html>
