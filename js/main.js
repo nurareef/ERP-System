@@ -39,6 +39,20 @@
         });
     });
 
+        async function verifyAccess(email) {
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyL164ATT4HSZXt1Y4YEi3HXGHof5H4QLk6GaTivo7gZIbb2HQXEzleWN-i3uN-5Rgp/exec"; // Replace with your Google Apps Script URL
+        const response = await fetch(scriptURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: email })
+        });
+        const result = await response.json();
+        return result.authorized; // Expecting { authorized: true } or { authorized: false }
+    }
+
+
     // Function to check if the user is authorized
     function checkUserAccess(userEmail) {
         if (userEmail === "production@integratedenergy.com.my") {
