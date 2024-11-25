@@ -55,12 +55,15 @@
 
     // Function to check if the user is authorized
     function checkUserAccess(userEmail) {
-        if (userEmail === "production@integratedenergy.com.my") {
-            // Show the page content if authorized
-            document.getElementById("content").style.display = "block"; // Show content
-        } else {
-            alert("You are not authorized to access this page.");
-        }
+        verifyAccess(userEmail).then(isAuthorized => {
+            if (isAuthorized) {
+                document.getElementById("content").style.display = "block"; // Show content
+            } else {
+                alert("You are not authorized to access this page.");
+            }
+        }).catch(error => {
+            console.error("Error verifying access:", error);
+        });
     }
 
 
