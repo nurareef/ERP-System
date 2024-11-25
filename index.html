@@ -7,10 +7,69 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Nur Areef</title>
+    
+    <body>
+        <div id="login">
+            <button onclick="signIn()">Sign in with Microsoft</button>
+        </div>
+        <div id="content" style="display: none;">
+            <h1>Welcome to the Protected Page</h1>
+            <!-- Your protected content goes here -->
+        </div>
+    </body>
 
     <script>
         document.documentElement.classList.remove('no-js');
         document.documentElement.classList.add('js');
+
+        const msalConfig = {
+            auth: {
+                clientId: "5c10667d-f7fd-4256-90b1-66cff309e9ed", // Your actual client ID
+                authority: "https://login.microsoftonline.com/common",
+                redirectUri: "https://nurareef.com" // Your website URL
+            }
+        };
+    
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+    
+        const loginRequest = {
+            scopes: ["User.Read"]
+        };
+    
+        async function signIn() {
+            try {
+                const loginResponse = await msalInstance.loginPopup(loginRequest);
+                const account = loginResponse.account;
+                const email = account.username;
+    
+                // Send email to Google Apps Script for verification
+                const isAuthorized = await verifyAccess(email);
+    
+                if (isAuthorized) {
+                    alert("Access Granted");
+                    document.getElementById("content").style.display = "block";
+                    document.getElementById("login").style.display = "none";
+                } else {
+                    alert("Access Denied");
+                }
+            } catch (error) {
+                console.error("Login failed", error);
+            }
+        }
+    
+        async function verifyAccess(email) {
+            const scriptURL = "https://script.google.com/macros/s/AKfycbyL164ATT4HSZXt1Y4YEi3HXGHof5H4QLk6GaTivo7gZIbb2HQXEzleWN-i3uN-5Rgp/exec";
+            const response = await fetch(scriptURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: email })
+            });
+            const result = await response.json();
+            return result.authorized; // Expecting { authorized: true } or { authorized: false }
+        }
+
     </script>
 
     <!-- CSS
@@ -633,6 +692,9 @@
     ================================================== -->
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://alcdn.msauth.net/browser/2.33.0/js/msal-browser.min.js"></script>
+
+    
 
 </body>
 </html>
