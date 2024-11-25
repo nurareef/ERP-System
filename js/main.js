@@ -14,6 +14,41 @@
 
     };
 
+    // MSAL Configuration
+    const msalConfig = {
+        auth: {
+            clientId: "5c10667d-f7fd-4256-90b1-66cff309e9ed", // Your actual client ID
+            authority: "https://login.microsoftonline.com/common",
+            redirectUri: "https://nurareef.com" // Redirect URI to match your domain
+        }
+    };
+    
+    // Create MSAL instance
+    const msalInstance = new msal.PublicClientApplication(msalConfig);
+    
+    // Handle login button click
+    document.getElementById("loginButton").addEventListener("click", function () {
+        msalInstance.loginPopup({
+            scopes: ["User.Read"]  // Scopes for Microsoft Graph API
+        }).then(function (loginResponse) {
+            console.log("Logged in successfully:", loginResponse);
+            const userEmail = loginResponse.account.username;
+            checkUserAccess(userEmail);  // Call the function to check the user's access
+        }).catch(function (error) {
+            console.error("Login failed:", error);
+        });
+    });
+
+    // Function to check if the user is authorized
+    function checkUserAccess(userEmail) {
+        if (userEmail === "production@integratedenergy.com.my") {
+            // Show the page content if authorized
+            document.getElementById("content").style.display = "block"; // Show content
+        } else {
+            alert("You are not authorized to access this page.");
+        }
+    }
+
 
    /* preloader
     * -------------------------------------------------- */
