@@ -1,8 +1,3 @@
-/* ===================================================================
- * Monica 1.0.0 - Main JS
- *
- * ------------------------------------------------------------------- */
-
 (function(html) {
 
     'use strict';
@@ -13,58 +8,6 @@
         mailChimpURL : 'https://facebook.us1.list-manage.com/subscribe/post?u=1abf75f6981256963a47d197a&amp;id=37c6d8f4d6' 
 
     };
-
-    // MSAL Configuration
-    const msalConfig = {
-        auth: {
-            clientId: "5c10667d-f7fd-4256-90b1-66cff309e9ed", // Your actual client ID
-            authority: "https://login.microsoftonline.com/common",
-            redirectUri: "https://nurareef.com" // Redirect URI to match your domain
-        }
-    };
-    
-    // Create MSAL instance
-    const msalInstance = new msal.PublicClientApplication(msalConfig);
-    
-    // Handle login button click
-    document.getElementById("loginButton").addEventListener("click", function () {
-        msalInstance.loginPopup({
-            scopes: ["User.Read"]  // Scopes for Microsoft Graph API
-        }).then(function (loginResponse) {
-            console.log("Logged in successfully:", loginResponse);
-            const userEmail = loginResponse.account.username;
-            checkUserAccess(userEmail);  // Call the function to check the user's access
-        }).catch(function (error) {
-            console.error("Login failed:", error);
-        });
-    });
-
-        async function verifyAccess(email) {
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyL164ATT4HSZXt1Y4YEi3HXGHof5H4QLk6GaTivo7gZIbb2HQXEzleWN-i3uN-5Rgp/exec"; // Replace with your Google Apps Script URL
-        const response = await fetch(scriptURL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email: email })
-        });
-        const result = await response.json();
-        return result.authorized; // Expecting { authorized: true } or { authorized: false }
-    }
-
-
-    // Function to check if the user is authorized
-    function checkUserAccess(userEmail) {
-        verifyAccess(userEmail).then(isAuthorized => {
-            if (isAuthorized) {
-                document.getElementById("content").style.display = "block"; // Show content
-            } else {
-                alert("You are not authorized to access this page.");
-            }
-        }).catch(error => {
-            console.error("Error verifying access:", error);
-        });
-    }
 
 
    /* preloader
